@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    margin: 0;
+    width: 280px;
+    padding: 14px 16px 16px;
+    font: 13px/1.6 system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  h1 { font-size: 15px; margin: 0 0 4px; }
+  p.desc { margin: 0 0 12px; opacity: .7; font-size: 12px; }
+  label { display: flex; align-items: center; gap: 8px; padding: 6px 0; cursor: pointer; }
+  input[type="checkbox"] { width: 15px; height: 15px; margin: 0; }
+  button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    border: 0;
+    border-radius: 8px;
+    background: #3460ff;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  button:hover { background: #2b52d8; }
+  .hint { margin-top: 10px; font-size: 11px; opacity: .6; }
+</style>
+</head>
+<body>
+  <h1>中文排版 Pangu CN</h1>
+  <p class="desc">在网页编辑器中整理选中文字的中英文间距</p>
+  <label><input id="spacing" type="checkbox"> 中英文/数字之间补空格</label>
+  <label><input id="punctuation" type="checkbox"> 半角标点转全角</label>
+  <button id="run">整理当前选中文字</button>
+  <div class="hint">快捷键 Alt+Shift+P，或右键菜单「中文排版：整理选中文字」</div>
+  <script src="popup.js"></script>
+</body>
+</html>
