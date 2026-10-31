@@ -25,11 +25,21 @@
     return el.isContentEditable;
   }
 
-  function replaceInField(el, formatted) {
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
+  function replaceInField(el, formatted, start, end) {
     el.setRangeText(formatted, start, end, 'end');
     el.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+
+  /** 文本框/输入框的选区无法通过 window.getSelection() 读取，必须用 selectionStart/selectionEnd */
+  function getFieldSelection() {
+    const el = document.activeElement;
+    if (!el) return null;
+    const isField = el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && isEditable(el));
+    if (!isField || el.disabled || el.readOnly) return null;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    if (typeof start !== 'number' || typeof end !== 'number' || start === end) return null;
+    return { el, start, end, text: el.value.slice(start, end) };
   }
 
   function copyText(text) {
@@ -79,8 +89,10 @@
   }
 
   function formatSelection() {
-    const selection = window.getSelection();
-    const raw = selection ? selection.toString() : '';
+    const field = getFieldSelection();
+    const active = document.activeElement;
+    const domSelection = window.getSelection();
+    const raw = field ? field.text : domSelection ? domSelection.toString() : '';
     if (!raw || !raw.trim()) {
       toast('请先选中需要整理的文字');
       return;
@@ -92,15 +104,15 @@
       return;
     }
 
-    const active = document.activeElement;
-    if (isEditable(active) && selection.rangeCount > 0) {
-      if (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT') {
-        replaceInField(active, formatted);
-        toast('已整理选中文字');
-      } else {
-        document.execCommand('insertText', false, formatted);
-        toast('已整理选中文字');
-      }
+    if (field) {
+      replaceInField(field.el, formatted, field.start, field.end);
+      toast('已整理选中文字');
+      return;
+    }
+
+    if (active && active.isContentEditable && domSelection && domSelection.rangeCount > 0) {
+      document.execCommand('insertText', false, formatted);
+      toast('已整理选中文字');
       return;
     }
 
