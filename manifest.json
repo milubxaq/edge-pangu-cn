@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "中文排版 Pangu CN",
+  "name": "中文排版助手",
   "version": "1.0.0",
   "description": "在网页编辑器里整理中文排版：中英文之间自动补空格，清理中文标点前后的多余空格。",
   "permissions": ["contextMenus", "storage", "activeTab", "scripting"],
